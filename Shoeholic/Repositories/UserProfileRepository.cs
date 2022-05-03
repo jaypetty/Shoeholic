@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Shoeholic.Models;
 using Shoeholic.Utils;
-using Shoeholic.Repositories;
 
 namespace Shoeholic.Repositories
 {
@@ -10,7 +9,7 @@ namespace Shoeholic.Repositories
     {
         public UserProfileRepository(IConfiguration configuration) : base(configuration) { }
 
-        public UserProfile GetByFirebaseUserId(string firebaseUserId)
+        public UserProfile GetByFirebaseUserId(string firebaseUserProfileId)
         {
             using (var conn = Connection)
             {
@@ -18,14 +17,11 @@ namespace Shoeholic.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT up.Id, Up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, 
-                               up.Email, up.CreateDateTime, up.ImageLocation, up.UserTypeId,
-                               ut.Name AS UserTypeName
-                          FROM UserProfile up
-                               LEFT JOIN UserType ut on up.UserTypeId = ut.Id
-                         WHERE FirebaseUserId = @FirebaseuserId AND IsDeactivated = 0";
+                        SELECT Id,FirebaseUserProfileId, FirstName, LastName, Email 
+                          FROM UserProfile 
+                         WHERE FirebaseUserProfileId = @FirebaseuserprofileId";
 
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
+                    DbUtils.AddParameter(cmd,"@FirebaseUserProfileId", firebaseUserProfileId);
 
                     UserProfile userProfile = null;
 
@@ -35,7 +31,7 @@ namespace Shoeholic.Repositories
                         userProfile = new UserProfile()
                         {
                             Id = DbUtils.GetInt(reader, "Id"),
-                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                            FirebaseUserProfileId = DbUtils.GetString(reader, "FirebaseUserProfileId"),
                             FirstName = DbUtils.GetString(reader, "FirstName"),
                             LastName = DbUtils.GetString(reader, "LastName"),
                             Email = DbUtils.GetString(reader, "Email")
@@ -61,7 +57,6 @@ namespace Shoeholic.Repositories
                                                FirstName,
                                                LastName,
                                                Email,
-                                               ImageLocation,
                                                Name
                                           FROM UserProfile up
                                                JOIN UserType ut ON ut.Id = UserTypeId
@@ -90,44 +85,7 @@ namespace Shoeholic.Repositories
             }
         }
 
-        public UserProfile GetById(int id)
-        {
-            using (var conn = Connection)
-            {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
-                        SELECT up.Id, Up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, 
-                               up.Email, up.CreateDateTime, up.ImageLocation, up.UserTypeId,
-                               ut.Name AS UserTypeName
-                          FROM UserProfile up
-                               LEFT JOIN UserType ut on up.UserTypeId = ut.Id
-                         WHERE up.Id = @id AND IsDeactivated = 0";
-
-                    DbUtils.AddParameter(cmd, "@Id", id);
-
-                    UserProfile userProfile = null;
-
-                    var reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        userProfile = new UserProfile()
-                        {
-                            Id = DbUtils.GetInt(reader, "Id"),
-                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
-                            FirstName = DbUtils.GetString(reader, "FirstName"),
-                            LastName = DbUtils.GetString(reader, "LastName"),
-                            Email = DbUtils.GetString(reader, "Email"),
-                        };
-                    }
-                    reader.Close();
-
-                    return userProfile;
-                }
-            }
-        }
-
+       
         public void Add(UserProfile userProfile)
         {
             using (var conn = Connection)
@@ -140,7 +98,7 @@ namespace Shoeholic.Repositories
                                         OUTPUT INSERTED.ID
                                         VALUES (@FirebaseUserId, @FirstName, @LastName, @DisplayName, 
                                                 @Email, @CreateDateTime, @ImageLocation, @UserTypeId)";
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", userProfile.FirebaseUserId);
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", userProfile.FirebaseUserProfileId);
                     DbUtils.AddParameter(cmd, "@FirstName", userProfile.FirstName);
                     DbUtils.AddParameter(cmd, "@LastName", userProfile.LastName);
                     DbUtils.AddParameter(cmd, "@Email", userProfile.Email);

@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Shoeholic.Models
 {
@@ -9,8 +6,9 @@ namespace Shoeholic.Models
     {
         public int Id { get; set; }
 
+        [Required]
         [StringLength(28, MinimumLength = 28)]
-        public string FirebaseUserId { get; set; }
+        public string FirebaseUserProfileId { get; set; }
 
         [Required]
         [MaxLength(50)]

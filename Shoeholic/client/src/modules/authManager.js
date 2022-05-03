@@ -67,3 +67,4 @@ export const onLoginStatusChange = (onLoginStatusChangeHandler) => {
     onLoginStatusChangeHandler(!!user);
   });
 };
+
