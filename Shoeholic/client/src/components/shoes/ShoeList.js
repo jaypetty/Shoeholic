@@ -2,7 +2,7 @@ import React, { useEffect, useState} from "react";
 import Shoe from "./Shoe";
 import { getAllShoes } from "../../modules/shoeManager";
 
-const ShoeList = () => {
+const MyShoes = () => {
     const [shoes, setShoes] = useState([]);
 
     const getShoes = () => {
@@ -17,11 +17,11 @@ const ShoeList = () => {
         <div className="container">
             <div className="row justify-content-center">
                 {shoes.map((shoe) => (
-                    <Shoe shoe={shoe} key={shoe.id} />
+                    <Shoe key={shoe.id} shoe={shoe}  />
                 ))}
             </div>
         </div>
     );
 };
 
-export default ShoeList;
+export default MyShoes;

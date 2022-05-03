@@ -9,8 +9,8 @@ const Shoe = ({shoe}) => {
                     {shoe.name}
                 </CardTitle>
                 <CardText>
-                  <p>{shoe.brand}</p>  
-                  <p>{shoe.title}</p>
+                  {shoe.title} 
+                  
                 </CardText>
             </CardBody>
         </Card>

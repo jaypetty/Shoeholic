@@ -4,6 +4,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Homepage from "./HomePage";
 import ShoeForm from "./shoes/ShoeForm";
+import MyShoes from "./shoes/ShoeList";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -14,7 +15,11 @@ export default function ApplicationViews({ isLoggedIn }) {
           {isLoggedIn ? <Homepage /> : <Redirect to="/login" />}
         </Route>
 
-        <Route path="/shoes/newShoe" exact>
+        <Route path="/myshoes" exact>
+          {isLoggedIn ? <MyShoes /> : <Redirect to="/login" />}
+        </Route>
+
+        <Route path="/myshoes/newShoe" exact>
           {isLoggedIn ? <ShoeForm /> : <Redirect to="/login" />}
         </Route>
 
