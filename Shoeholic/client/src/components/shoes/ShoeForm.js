@@ -69,7 +69,7 @@ const ShoeForm = () => {
                 />
             </FormGroup>
             <FormGroup>
-                <Label for="purchaseDate">ReleaseDate</Label>
+                <Label for="purchaseDate">PurchaseDate</Label>
                 <Input
                 type="date"
                 name="purchaseDate"
