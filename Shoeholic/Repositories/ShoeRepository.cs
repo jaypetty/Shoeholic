@@ -72,5 +72,57 @@ namespace Shoeholic.Repositories
                 }
             }
         }
+
+        public Shoe GetById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT s.Id, s.Name, s.BrandId, s.ReleaseDate, s.RetailPrice, s.PurchaseDate, s.Title, s.ColorWay, s.CollectionId,
+                        b.[Name] AS BrandName, c.[Name] AS CollectionName
+                        FROM Shoe s
+                        JOIN Collection c ON s.CollectionId = c.id
+                        JOIN Brand b ON s.BrandId = b.id
+                        WHERE s.Id = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+                    var reader = cmd.ExecuteReader();
+
+                    Shoe shoe = null;
+                    while(reader.Read())
+                    {
+                        shoe = new Shoe()
+                        {
+                            Id = id,
+                            Name = DbUtils.GetString(reader, "Name"),
+                            ReleaseDate = DbUtils.GetDateTime(reader, "ReleaseDate"),
+                            RetailPrice = DbUtils.GetInt(reader, "RetailPrice"),
+                            PurchaseDate = DbUtils.GetDateTime(reader, "PurchaseDate"),
+                            Title = DbUtils.GetString(reader, "Title"),
+                            Colorway = DbUtils.GetString(reader, "ColorWay"),
+                            BrandId = DbUtils.GetInt(reader, "BrandId"),
+                            CollectionId = DbUtils.GetInt(reader, "CollectionId"),
+                            Collection = new Collection()
+                            {
+                                Id = DbUtils.GetInt(reader, "CollectionId"),
+                                Name = DbUtils.GetString(reader, "Name")
+                            },
+                            Brand = new Brand()
+                            {
+                                Id = DbUtils.GetInt(reader, "BrandId"),
+                                Name = DbUtils.GetString(reader, "Name")
+                            }
+
+                        };
+                    }
+                    return shoe;
+
+                }
+            }
+        }
     }
 }

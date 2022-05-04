@@ -20,5 +20,6 @@ namespace Shoeholic.Models
         public string Colorway { get; set; }
         public int CollectionId { get; set; }
         public Brand Brand { get; set; }
+        public Collection Collection { get; set; }
     }
 }

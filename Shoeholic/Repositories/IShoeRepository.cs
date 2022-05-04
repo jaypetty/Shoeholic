@@ -7,5 +7,6 @@ namespace Shoeholic.Repositories
     {
         void Add(Shoe shoe);
         List<Shoe> GetAllShoes();
+        Shoe GetById(int id);
     }
 }
