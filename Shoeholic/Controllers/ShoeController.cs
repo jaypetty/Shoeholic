@@ -42,5 +42,13 @@ namespace Shoeholic.Controllers
             }
             return Ok(shoe);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, Shoe shoe)
+        {
+            _shoeRepository.Update(shoe);
+            return Ok(shoe);
+        }
+        
     }
 }

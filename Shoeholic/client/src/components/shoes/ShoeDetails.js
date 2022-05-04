@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {Card,CardImg, CardText,CardTitle,Container,Button} from "reactstrap";
 import { getShoeById } from "../../modules/shoeManager";
+import { Link } from "react-router-dom";
 
 const ShoeDetails = () => {
     const [shoe, setShoe] = useState();
@@ -38,6 +39,9 @@ const ShoeDetails = () => {
                 <CardText>
                     <small>{shoe.colorWay}</small>
                 </CardText>
+                <Link to={`/myshoes/edit/${id}`}>
+            <Button>Edit</Button>
+          </Link>
             </Card>
         </Container>
     );

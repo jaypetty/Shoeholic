@@ -124,5 +124,39 @@ namespace Shoeholic.Repositories
                 }
             }
         }
+
+        public void Update(Shoe shoe)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Shoe
+                                        SET Name = @name,
+                                            BrandId = @brandId,
+                                            ReleaseDate = @releaseDate,
+                                            RetailPrice = @retailPrice,
+                                            PurchaseDate = @purchaseDate,
+                                            Title = @title,
+                                            ColorWay = @colorWay,
+                                            CollectionId = @collectionId
+                                        WHERE Id = @id";
+                    DbUtils.AddParameter(cmd, "@id", shoe.Id);
+                    DbUtils.AddParameter(cmd, "@name", shoe.Name);
+                    DbUtils.AddParameter(cmd, "@brandId", shoe.BrandId);
+                    DbUtils.AddParameter(cmd, "@releaseDate", shoe.ReleaseDate);
+                    DbUtils.AddParameter(cmd, "@retailPrice", shoe.RetailPrice);
+                    DbUtils.AddParameter(cmd, "@purchaseDate", shoe.PurchaseDate);
+                    DbUtils.AddParameter(cmd, "@title", shoe.Title);
+                    DbUtils.AddParameter(cmd, "@colorWay", shoe.Colorway);
+                    DbUtils.AddParameter(cmd, "@collectionId", shoe.CollectionId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
+    
+
