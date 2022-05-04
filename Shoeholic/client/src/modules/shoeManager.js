@@ -53,3 +53,39 @@ export const getAllShoes = () => {
         });
     });
 };
+
+export const getShoe = (id) => {
+  return getToken().then((token) =>
+    fetch(`${_apiUrl}/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error");
+      }
+    })
+  );
+};
+
+export const editShoe = (shoe) => {
+  return getToken().then((token) => {
+    fetch(`${_apiUrl}/${shoe.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(shoe),
+    }).then((res) => {
+      if (res.ok) {
+        return res.status;
+      } else {
+        throw new Error("Error");
+      }
+    });
+  });
+}

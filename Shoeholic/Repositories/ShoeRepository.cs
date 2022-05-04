@@ -142,6 +142,7 @@ namespace Shoeholic.Repositories
                                             ColorWay = @colorWay,
                                             CollectionId = @collectionId
                                         WHERE Id = @id";
+                    DbUtils.AddParameter(cmd, "@id", shoe.Id);
                     DbUtils.AddParameter(cmd, "@name", shoe.Name);
                     DbUtils.AddParameter(cmd, "@brandId", shoe.BrandId);
                     DbUtils.AddParameter(cmd, "@releaseDate", shoe.ReleaseDate);
@@ -157,5 +158,5 @@ namespace Shoeholic.Repositories
         }
     }
 }
-    }
-}
+    
+

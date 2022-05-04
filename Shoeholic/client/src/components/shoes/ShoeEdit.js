@@ -1,22 +1,27 @@
-import React, { useState} from "react";
-import { useHistory } from "react-router-dom";
-import { addShoe } from "../../modules/shoeManager";
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import React, { useState, useEffect} from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { editShoe, getShoeById } from "../../modules/shoeManager";
+import { Container, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
-const ShoeForm = () => {
+const ShoeEdit = () => {
+    
+    const {id} = useParams();
     const history = useHistory();
     const emptyShoe = {
         name: "",
-        brandId: "",
         releaseDate: "",
         retailPrice: "",
         purchaseDate: "",
         title: "",
-        colorWay: "",
-        collectionId: "",
+        colorWay: "", 
     };
 
     const [shoe, setShoe] = useState(emptyShoe);
+
+    useEffect(() => {
+        getShoeById(id).then(setShoe);
+    }, [id]);
+
     const handleInputChange = (evt) => {
         const value = evt.target.value;
         const key = evt.target.id;
@@ -26,33 +31,33 @@ const ShoeForm = () => {
         shoeCopy[key] = value;
         setShoe(shoeCopy);
     };
+
     const handleSave = (evt) => {
         evt.preventDefault();
-        addShoe(shoe).then((s) => {
-            history.push("/shoe");
+        editShoe(shoe).then(() => {
+            history.push(`/myshoes/details/${shoe.id}`);
         });
     };
-
+   
     return (
-        <Form>
-            <FormGroup>
+        <Container>
+            <Form>
+                <FormGroup>
                 <Label for="name">Name</Label>
                 <Input
                 type="text"
                 name="name"
                 id="name"
-                placeholder="Shoe Name"
                 value={shoe.name}
                 onChange={handleInputChange}
                 />
-            </FormGroup>
-            <FormGroup>
+                </FormGroup>
+                <FormGroup>
                 <Label for="releaseDate">ReleaseDate</Label>
                 <Input
-                type="datetime-local"
+                type="date"
                 name="releaseDate"
                 id="releaseDate"
-                placeholder="ReleaseDate"
                 value={shoe.releaseDate}
                 onChange={handleInputChange}
                 />
@@ -63,7 +68,6 @@ const ShoeForm = () => {
                 type="number"
                 name="retailPrice"
                 id="retailPrice"
-                placeholder="RetailPrice"
                 value={shoe.retailPrice}
                 onChange={handleInputChange}
                 />
@@ -74,7 +78,6 @@ const ShoeForm = () => {
                 type="date"
                 name="purchaseDate"
                 id="purchaseDate"
-                placeholder="PurchaseDate"
                 value={shoe.purchaseDate}
                 onChange={handleInputChange}
                 />
@@ -85,7 +88,6 @@ const ShoeForm = () => {
                 type="text"
                 name="title"
                 id="title"
-                placeholder="Shoe Title"
                 value={shoe.title}
                 onChange={handleInputChange}
                 />
@@ -96,15 +98,16 @@ const ShoeForm = () => {
                 type="text"
                 name="colorWay"
                 id="colorWay"
-                placeholder="ColorWay"
                 value={shoe.colorWay}
                 onChange={handleInputChange}
                 />
             </FormGroup>
             <Button className="btn btn-primary" onClick={handleSave}>
-        Submit
-      </Button>
-        </Form>
-    );
-};
-export default ShoeForm;
+                Submit
+            </Button>
+            </Form>
+        </Container>
+    )
+}
+
+export default ShoeEdit
