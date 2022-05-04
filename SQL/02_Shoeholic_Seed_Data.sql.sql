@@ -24,7 +24,7 @@ values (1, 'Hightops'), (2, 'running'), (3, 'casual'), (4, 'rare');
 set identity_insert [Brand] off;
 
 set identity_insert [Shoe] on;
-insert into [Shoe] ([Id], [Name], [BrandId],  [ReleaseDate], [RetailPrice], [PurchaseDate], [Title], [ColorWay], [CollectionId]) 
+insert into [Shoe] ([Id], [Name], [BrandId],  [ReleaseDate], [RetailPrice], [PurchaseDate], [ImageUrl], [Title], [ColorWay], [CollectionId]) 
 values (1, 'Jordan 1', 1,  '2019-04-01', 170, '2019-12-04', 'Court Purple', 'Purple, White, Black', 1);
 set identity_insert [Shoe] off;
 
