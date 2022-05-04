@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from "react";
 import Shoe from "./Shoe";
 import { getAllShoes } from "../../modules/shoeManager";
+import { Link } from "react-router-dom";
 
 const MyShoes = () => {
     const [shoes, setShoes] = useState([]);

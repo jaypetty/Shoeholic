@@ -31,5 +31,16 @@ namespace Shoeholic.Controllers
 
             return CreatedAtAction("Get", new { id = shoe.Id }, shoe);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var shoe = _shoeRepository.GetById(id);
+            if (shoe == null)
+            {
+                return NotFound();
+            }
+            return Ok(shoe);
+        }
     }
 }
