@@ -7,6 +7,7 @@ import ShoeForm from "./shoes/ShoeForm";
 import MyShoes from "./shoes/ShoeList";
 import ShoeDetails from "./shoes/ShoeDetails";
 import ShoeEdit from "./shoes/ShoeEdit";
+import MyCollections from "./collections/CollectionList";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -31,6 +32,10 @@ export default function ApplicationViews({ isLoggedIn }) {
 
         <Route path="/myshoes/edit/:id(\d+)" exact>
           {isLoggedIn ? <ShoeEdit /> : <Redirect to="/login" />}
+        </Route>
+
+        <Route path="/mycollections" exact> 
+          {isLoggedIn ? <MyCollections /> : <Redirect to="/login" />}
         </Route>
 
         <Route path="/login">
