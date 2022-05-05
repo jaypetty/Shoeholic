@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shoeholic.Repositories;
 using Shoeholic.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Shoeholic.Controllers
 {
@@ -16,13 +17,21 @@ namespace Shoeholic.Controllers
         public CollectionController(ICollectionRepository collectionRepository, IUserProfileRepository userProfileRepository)
         {
             _collectionRepository = collectionRepository;
-            _userProfileRepository = userProfileRepository;
+            _userProfileRepository = userProfileRepository; 
         }
 
-        [HttpGet("GetAllUserCollections/{id}")]
-        public IActionResult GetAllUserCollections(int id)
+        [HttpGet("UserCollectionByUser")]
+        public IActionResult UserCollectionByUser(int id)
         {
-            return Ok(_collectionRepository.GetAllUserCollections(id));
+            UserProfile user = GetCurrentUserProfile();
+            id = user.Id;
+            return Ok(_collectionRepository.GetUserCollectionByUserId(id));
+        }
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }

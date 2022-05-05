@@ -11,40 +11,42 @@ namespace Shoeholic.Repositories
     {
         public CollectionRepository(IConfiguration configuration) : base(configuration) { }
 
-        public List<Collection> GetAllUserCollections(int UPID)
+        public List<Collection> GetUserCollectionByUserId(int id)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT c.Id, c.Name, c.UserProfileId, up.FirstName, up.LastName
+                    cmd.CommandText = @"SELECT c.Id, c.[Name], c.UserProfileId,
+                                               u.FirstName
                                        FROM Collection c
-                                       LEFT JOIN UserProfile up ON c.UserProfileId = up.Id
-                                       WHERE c.UserProfileId = UPID";
+                                       LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
+                                       WHERE c.UserProfileId = @userProfileId";
 
-                    DbUtils.AddParameter(cmd, "@UPID", UPID);
+                    DbUtils.AddParameter(cmd, "@userProfileId", id);
 
-                    var reader = cmd.ExecuteReader();
-
-                    var collections = new List<Collection>();
-                    while (reader.Read())
+                   using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        collections.Add(new Collection()
+                        List<Collection> collections = new List<Collection>();
+                        while (reader.Read())
                         {
-                            Id = DbUtils.GetInt(reader, "Id"),
-                            Name = DbUtils.GetString(reader, "Name"),
-                            UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
-                            UserProfile = new UserProfile()
+                            collections.Add(new Collection()
                             {
-                                Id = DbUtils.GetInt(reader, "UserProfileId"),
-                                FirstName = DbUtils.GetString(reader, "FirstName"),
-                                LastName = DbUtils.GetString(reader, "LastName")
-                            }
-                        });
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                UserProfile = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserProfileId"),
+                                    FirstName = DbUtils.GetString(reader, "FirstName")
+                                }
+                                
+                            });
+                        }
+                        reader.Close();
+                        return collections;
                     }
-                    reader.Close();
-                    return collections;
 
                 }
             }
