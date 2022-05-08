@@ -1,4 +1,6 @@
-﻿namespace Shoeholic.Models
+﻿using System.Collections.Generic;
+
+namespace Shoeholic.Models
 {
     public class Collection
     {
@@ -6,5 +8,6 @@
         public string Name { get; set; }
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
+        public List<Shoe> shoes { get; set; }
     }
 }

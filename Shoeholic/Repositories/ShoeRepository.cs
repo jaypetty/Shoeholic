@@ -93,7 +93,7 @@ namespace Shoeholic.Repositories
                     var reader = cmd.ExecuteReader();
 
                     Shoe shoe = null;
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         shoe = new Shoe()
                         {
@@ -153,6 +153,56 @@ namespace Shoeholic.Repositories
                     DbUtils.AddParameter(cmd, "@collectionId", shoe.CollectionId);
 
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<Shoe> GetAllShoesByCollectionId(int collectionId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                        SELECT s.Id, s.[Name], s.BrandId, s.Title, s.CollectionId,
+                                               b.[Name],
+                                               c.[Name] AS CollectionName
+                                        FROM Shoe s
+                                            LEFT JOIN Brand b ON s.BrandId = b.Id
+                                            LEFT JOIN Collection c ON s.CollectionId = c.Id
+
+                                        WHERE s.CollectionId = @collectionId";
+
+                    DbUtils.AddParameter(cmd, "@collectionid", collectionId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        List<Shoe> shoes = new List<Shoe>();
+                        while (reader.Read())
+                        {
+                            Shoe shoe = new Shoe
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Title = DbUtils.GetString(reader, "Title"),
+                                BrandId = DbUtils.GetInt(reader, "BrandId"),
+                                CollectionId = DbUtils.GetInt(reader, "CollectionId"),
+                                Brand = new Brand
+                                {
+                                    Id = DbUtils.GetInt(reader, "Id"),
+                                    Name = DbUtils.GetString(reader, "Name"),
+                                },
+                                Collection = new Collection
+                                {
+                                    Id = DbUtils.GetInt(reader, "Id"),
+                                    Name = DbUtils.GetString(reader, "CollectionName"),
+                                }
+                            };
+                            shoes.Add(shoe);
+                        }
+                        return shoes;
+                    }
                 }
             }
         }

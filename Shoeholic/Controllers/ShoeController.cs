@@ -49,6 +49,13 @@ namespace Shoeholic.Controllers
             _shoeRepository.Update(shoe);
             return Ok(shoe);
         }
-        
+
+        [HttpGet("GetWithCollections/{id}")]
+        public IActionResult GetWithCollections(int id)
+        {
+            var shoes = _shoeRepository.GetAllShoesByCollectionId(id);
+            return Ok(shoes);
+        }
+
     }
 }

@@ -89,3 +89,20 @@ export const editShoe = (shoe) => {
     });
   });
 }
+
+export const getShoesByCollectionId = (id) => {
+  return getToken().then((token) =>
+    fetch(`${_apiUrl}/GetWithCollections/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error");
+      }
+    })
+  );
+};
