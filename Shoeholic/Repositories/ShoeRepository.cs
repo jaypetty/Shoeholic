@@ -18,7 +18,7 @@ namespace Shoeholic.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT s.Id, s.Name, s.BrandId, s.ReleaseDate, s.Title, s.ColorWay, b.Name AS BrandName
+                        SELECT s.Id, s.[Name], s.BrandId, s.ReleaseDate, s.Title, s.ColorWay, b.[Name] AS BrandName
                         FROM Shoe s
                         JOIN Brand b ON b.Id = s.BrandId";
 
@@ -38,7 +38,7 @@ namespace Shoeholic.Repositories
                                 Brand = new Brand()
                                 {
                                     Id = DbUtils.GetInt(reader, "Id"),
-                                    Name = DbUtils.GetString(reader, "Name")
+                                    Name = DbUtils.GetString(reader, "BrandName")
                                 },
                             });
                         }
@@ -109,12 +109,12 @@ namespace Shoeholic.Repositories
                             Collection = new Collection()
                             {
                                 Id = DbUtils.GetInt(reader, "CollectionId"),
-                                Name = DbUtils.GetString(reader, "Name")
+                                Name = DbUtils.GetString(reader, "CollectionName")
                             },
                             Brand = new Brand()
                             {
                                 Id = DbUtils.GetInt(reader, "BrandId"),
-                                Name = DbUtils.GetString(reader, "Name")
+                                Name = DbUtils.GetString(reader, "BrandName")
                             }
 
                         };
@@ -166,7 +166,7 @@ namespace Shoeholic.Repositories
                 {
                     cmd.CommandText = @"
                                         SELECT s.Id, s.[Name], s.BrandId, s.Title, s.CollectionId,
-                                               b.[Name],
+                                               b.[Name] AS BrandName,
                                                c.[Name] AS CollectionName
                                         FROM Shoe s
                                             LEFT JOIN Brand b ON s.BrandId = b.Id
@@ -191,7 +191,7 @@ namespace Shoeholic.Repositories
                                 Brand = new Brand
                                 {
                                     Id = DbUtils.GetInt(reader, "Id"),
-                                    Name = DbUtils.GetString(reader, "Name"),
+                                    Name = DbUtils.GetString(reader, "BrandName"),
                                 },
                                 Collection = new Collection
                                 {
