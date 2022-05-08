@@ -23,7 +23,7 @@ const ShoeDetails = () => {
     return (
         <Container>
             <Card>
-                <CardTitle>{shoe.name}</CardTitle>
+                <CardTitle>{shoe.name} by {shoe.brand.name}</CardTitle>
                 <CardText>
                     <small>{shoe.releaseDate}</small>
                 </CardText>
