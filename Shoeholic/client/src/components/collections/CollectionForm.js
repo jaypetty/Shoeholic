@@ -22,7 +22,7 @@ const CollectionForm = () => {
     const handleSave = (evt) => {
         evt.preventDefault();
         addCollection(collection).then((c) => {
-            history.push("/collection");
+            history.push("/mycollections");
         });
     };
 
@@ -34,7 +34,7 @@ const CollectionForm = () => {
                 type="text"
                 name="name"
                 id="name"
-                placeholder="Shoe Name"
+                placeholder="Collection Name"
                 value={collection.name}
                 onChange={handleInputChange}
                 />

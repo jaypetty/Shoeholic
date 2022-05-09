@@ -1,4 +1,5 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, } from "react";
+import { Button } from "reactstrap";
 import { useParams } from "react-router-dom";
 import { getUserCollectionByUserId } from "../../modules/collectionManager";
 import Collection from "./Collection";
@@ -21,6 +22,7 @@ const MyCollections = () => {
                 {collections.map((collection) => (
                     <Collection key={collection.id} collection={collection}  />
                 ))}
+                <Button className="btn btn-primary" href="/mycollections/newCollection">New Collection</Button>
             </div>
         </div>
     );

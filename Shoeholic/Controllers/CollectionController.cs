@@ -31,11 +31,12 @@ namespace Shoeholic.Controllers
         [HttpPost]
         public IActionResult Post(Collection collection)
         {
-            collection.UserProfileId = GetCurrentUserProfile().Id;
+            UserProfile user = GetCurrentUserProfile();
+            collection.UserProfileId = user.Id;
 
             _collectionRepository.AddCollection(collection);
 
-            return CreatedAtAction("Get", new {id = collection.Id}, collection);
+            return Ok(collection);
         }
 
         private UserProfile GetCurrentUserProfile()
