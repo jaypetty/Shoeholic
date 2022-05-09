@@ -17,3 +17,22 @@ export const getUserCollectionByUserId = () => {
       })
     );
   };
+
+  export const addCollection = (collection) => {
+    return getToken().then((token) =>
+      fetch(_apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(collection),
+      }).then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Error");
+        }
+      })
+    );
+  };

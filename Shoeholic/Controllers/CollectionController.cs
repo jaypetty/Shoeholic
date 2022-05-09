@@ -28,6 +28,16 @@ namespace Shoeholic.Controllers
             return Ok(_collectionRepository.GetUserCollectionByUserId(id));
         }
 
+        [HttpPost]
+        public IActionResult Post(Collection collection)
+        {
+            collection.UserProfileId = GetCurrentUserProfile().Id;
+
+            _collectionRepository.AddCollection(collection);
+
+            return CreatedAtAction("Get", new {id = collection.Id}, collection);
+        }
+
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
