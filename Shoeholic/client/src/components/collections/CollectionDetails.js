@@ -34,6 +34,7 @@ const CollectionDetails = () => {
             <CardText>
                 <small>{shoe.title}</small>
             </CardText>
+            
         </Card> 
         })}
     </>

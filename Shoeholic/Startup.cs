@@ -25,6 +25,7 @@ namespace Shoeholic
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IShoeRepository, ShoeRepository>();
             services.AddTransient<ICollectionRepository, CollectionRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
 
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");
             var googleTokenUrl = $"https://securetoken.google.com/{firebaseProjectId}";
