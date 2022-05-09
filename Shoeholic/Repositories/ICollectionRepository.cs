@@ -6,5 +6,6 @@ namespace Shoeholic.Repositories
     public interface ICollectionRepository
     {
         List<Collection> GetUserCollectionByUserId(int id);
+        void AddCollection(Collection collection);
     }
 }

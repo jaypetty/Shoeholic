@@ -53,6 +53,24 @@ namespace Shoeholic.Repositories
 
         }
 
-        
+        public void AddCollection(Collection collection)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                       INSERT INTO Collection (Name, UserProfileId)
+                                       OUTPUT INSERTED.ID
+                                       VALUES (@Name, @UserProfileId)";
+
+                    DbUtils.AddParameter(cmd, "@Name", collection.Name);
+                    DbUtils.AddParameter(cmd, "@UserProfileId", collection.UserProfileId);
+
+                    collection.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
     }
 }
