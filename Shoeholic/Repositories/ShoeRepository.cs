@@ -267,19 +267,28 @@ namespace Shoeholic.Repositories
             return shoe;
         }
 
-        public void AddShoeTags(int shoeId, int tagId)
+        public void AddShoeTags(List<Tag> tags, int shoeId)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO ShoeTag (ShoeId, TagId)
-                                        VALUES (@shoeId, @tagId";
+                    cmd.CommandText = @"INSERT INTO [ShoeTag] (ShoeId, TagId)
+                                        VALUES (@shoeId, @tagId0)";
+
+                    for (int i = 1; i < tags.Count; i++)
+                    {
+                        cmd.CommandText += $", (@tagId{i}, @shoeId)";
+                    }
+
+                    for (int i = 0; i < tags.Count; i++)
+                    {
+                        DbUtils.AddParameter(cmd, $"@tagId{i}", tags[i].Id);
+                       
+                    }
 
                     DbUtils.AddParameter(cmd, "@shoeId", shoeId);
-                    DbUtils.AddParameter(cmd, "@tagId", tagId);
-
 
                     cmd.ExecuteNonQuery();
                 }

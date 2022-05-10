@@ -68,24 +68,12 @@ const ShoeForm = () => {
         if (shoeCopy.collectionId === 0){
             window.alert("Please select a collection.")
         }
-        shoeCopy.SelectedTagIds = Array.from(shoeCopy.SelectedTagIds)
+      
         addShoe(shoeCopy).then((s) => { addShoeTags(s.id, tags).then(() => (history.push("/myshoes"))
            );
         });
     };
 
-    const handleTagCheck = (evt) => {
-        const shoeCopy = {...shoe}
-        const tagId = parseInt(evt.target.value)
-
-        if (shoeCopy.SelectedTagIds.has(tagId)) {
-            shoeCopy.SelectedTagIds.delete(tagId)
-        } else {
-            shoeCopy.SelectedTagIds.add(tagId)
-        }
-
-        setShoe(shoeCopy)
-      }
 
     return (
         <Form>
