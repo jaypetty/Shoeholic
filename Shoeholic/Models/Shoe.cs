@@ -23,5 +23,6 @@ namespace Shoeholic.Models
         public Brand Brand { get; set; }
         public Collection Collection { get; set; }
         public List<Tag> Tags { get; set; }
+        public List<int> SelectedTagIds { get; set; }
     }
 }

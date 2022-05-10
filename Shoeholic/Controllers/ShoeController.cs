@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Shoeholic.Repositories;
 using Shoeholic.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System;
+using System.Linq;
 
 namespace Shoeholic.Controllers
 {
@@ -11,10 +14,12 @@ namespace Shoeholic.Controllers
     public class ShoeController : ControllerBase
     {
         private readonly IShoeRepository _shoeRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public ShoeController(IShoeRepository shoeRepository)
+        public ShoeController(IShoeRepository shoeRepository, IUserProfileRepository userProfileRepository)
         {
             _shoeRepository = shoeRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         [HttpGet]
@@ -28,8 +33,13 @@ namespace Shoeholic.Controllers
         public IActionResult Post(Shoe shoe)
         {
             _shoeRepository.Add(shoe);
+            int newShoeId = shoe.Id;
+            foreach (int tagId in shoe.SelectedTagIds)
+            {
+                _shoeRepository.AddShoeTags(tagId, newShoeId);
+            }
 
-            return CreatedAtAction("Get", new { id = shoe.Id }, shoe);
+            return Ok(shoe);
         }
 
         [HttpGet("{id}")]
@@ -62,6 +72,14 @@ namespace Shoeholic.Controllers
         {
             var shoes = _shoeRepository.GetTagsByShoeId(id);
             return Ok(shoes);
+        }
+
+       
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
         }
 
     }

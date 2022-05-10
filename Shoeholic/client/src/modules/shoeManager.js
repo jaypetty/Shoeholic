@@ -123,3 +123,24 @@ export const getTagsByShoeId = (id) => {
     })
   );
 };
+
+export const addShoeTags = (shoeId, tags) => {
+  return getToken().then((token) => {
+    return fetch(`${_apiUrl}/${shoeId}/tags`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(tags),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error(
+          "An unknown error occurred while trying to save new tags for the shoe."
+        );
+      }
+    });
+  });
+};

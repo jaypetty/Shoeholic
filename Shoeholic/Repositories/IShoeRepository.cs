@@ -11,5 +11,6 @@ namespace Shoeholic.Repositories
         void Update(Shoe shoe);
         List<Shoe> GetAllShoesByCollectionId(int collectionId);
         public List<Tag> GetTagsByShoeId(int shoeId);
+        void AddShoeTags(int shoeId, int tagId);
     }
 }
