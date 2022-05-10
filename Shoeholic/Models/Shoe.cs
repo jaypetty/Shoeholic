@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Shoeholic.Models
 {
@@ -21,5 +22,6 @@ namespace Shoeholic.Models
         public int CollectionId { get; set; }
         public Brand Brand { get; set; }
         public Collection Collection { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

@@ -57,5 +57,12 @@ namespace Shoeholic.Controllers
             return Ok(shoes);
         }
 
+        [HttpGet("GetWithTags/{id}")]
+        public IActionResult GetWithTags(int id)
+        {
+            var shoes = _shoeRepository.GetTagsByShoeId(id);
+            return Ok(shoes);
+        }
+
     }
 }

@@ -39,6 +39,11 @@ const ShoeDetails = () => {
                 <CardText>
                     <small>{shoe.colorWay}</small>
                 </CardText>
+                <CardText>
+                    <>{shoe.tags.map(tag =>{
+                    return  tag.name
+                    }).join(', ')}</>
+                </CardText>
                 <Link to={`/myshoes/edit/${id}`}>
             <Button>Edit</Button>
           </Link>

@@ -106,3 +106,20 @@ export const getShoesByCollectionId = (id) => {
     })
   );
 };
+
+export const getTagsByShoeId = (id) => {
+  return getToken().then((token) =>
+    fetch(`${_apiUrl}/GetWithTags/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error");
+      }
+    })
+  );
+};

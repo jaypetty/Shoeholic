@@ -18,9 +18,12 @@ namespace Shoeholic.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT s.Id, s.[Name], s.BrandId, s.ReleaseDate, s.Title, s.ColorWay, b.[Name] AS BrandName
+                        SELECT s.Id, s.[Name], s.BrandId, s.ReleaseDate, s.Title, s.ColorWay,
+                               b.[Name] AS BrandName, t.Id AS TagId, t.[Name] AS TagName
                         FROM Shoe s
-                        JOIN Brand b ON b.Id = s.BrandId";
+                            JOIN Brand b ON b.Id = s.BrandId
+                            LEFT JOIN ShoeTag st ON st.ShoeId = s.Id
+                            LEFT JOIN Tag t ON st.TagId = t.Id";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -82,10 +85,12 @@ namespace Shoeholic.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT s.Id, s.Name, s.BrandId, s.ReleaseDate, s.RetailPrice, s.PurchaseDate, s.Title, s.ColorWay, s.CollectionId,
-                        b.[Name] AS BrandName, c.[Name] AS CollectionName
+                        b.[Name] AS BrandName, c.[Name] AS CollectionName, t.Id AS TagId, t.[Name] AS TagName
                         FROM Shoe s
-                        JOIN Collection c ON s.CollectionId = c.id
+                            JOIN Collection c ON s.CollectionId = c.id
                         JOIN Brand b ON s.BrandId = b.id
+                            LEFT JOIN ShoeTag st ON st.ShoeId = s.Id
+                            LEFT JOIN Tag t ON st.TagId = t.Id
                         WHERE s.Id = @id";
 
                     DbUtils.AddParameter(cmd, "@id", id);
@@ -95,30 +100,17 @@ namespace Shoeholic.Repositories
                     Shoe shoe = null;
                     while (reader.Read())
                     {
-                        shoe = new Shoe()
+                        shoe = NewShoeFromReader(reader);
+                        while (reader.Read())
                         {
-                            Id = id,
-                            Name = DbUtils.GetString(reader, "Name"),
-                            ReleaseDate = DbUtils.GetDateTime(reader, "ReleaseDate"),
-                            RetailPrice = DbUtils.GetInt(reader, "RetailPrice"),
-                            PurchaseDate = DbUtils.GetDateTime(reader, "PurchaseDate"),
-                            Title = DbUtils.GetString(reader, "Title"),
-                            Colorway = DbUtils.GetString(reader, "ColorWay"),
-                            BrandId = DbUtils.GetInt(reader, "BrandId"),
-                            CollectionId = DbUtils.GetInt(reader, "CollectionId"),
-                            Collection = new Collection()
+                            shoe.Tags.Add(new Tag
                             {
-                                Id = DbUtils.GetInt(reader, "CollectionId"),
-                                Name = DbUtils.GetString(reader, "CollectionName")
-                            },
-                            Brand = new Brand()
-                            {
-                                Id = DbUtils.GetInt(reader, "BrandId"),
-                                Name = DbUtils.GetString(reader, "BrandName")
-                            }
-
+                                Id = DbUtils.GetInt(reader, "TagId"),
+                                Name = DbUtils.GetString(reader, "TagName")
+                            });
                         };
                     }
+                    reader.Close();
                     return shoe;
 
                 }
@@ -205,6 +197,74 @@ namespace Shoeholic.Repositories
                     }
                 }
             }
+        }
+        public List<Tag> GetTagsByShoeId(int shoeId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT t.Id, t.[Name]
+                                       FROM ShoeTag
+                                         LEFT JOIN Tag t ON t.Id = ShoeTag.TagId
+                                       WHERE ShoeTag.Shoe.Id = @shoeId";
+
+                    DbUtils.AddParameter(cmd, "@shoeId", shoeId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        List<Tag> tags = new List<Tag>();
+                        while(reader.Read())
+                        {
+                            Tag tag = new Tag
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                            };
+                            tags.Add(tag);
+                        }
+                        reader.Close();
+                        return tags;
+                    }
+                }
+            }
+        }
+
+        private Shoe NewShoeFromReader(SqlDataReader reader)
+        {
+            Shoe shoe = new Shoe()
+            {
+                Id = DbUtils.GetInt(reader, "Id"),
+                Title = DbUtils.GetString(reader, "Title"),
+                Name = DbUtils.GetString(reader, "Name"),
+                ReleaseDate = DbUtils.GetDateTime(reader, "ReleaseDate"),
+                PurchaseDate = DbUtils.GetDateTime(reader, "PurchaseDate"),
+                Colorway = DbUtils.GetString(reader, "ColorWay"),
+                BrandId = DbUtils.GetInt(reader, "BrandId"),
+                Brand = new Brand()
+                {
+                    Id = DbUtils.GetInt(reader, "Id"),
+                    Name = DbUtils.GetString(reader, "BrandName")
+                },
+                CollectionId = DbUtils.GetInt(reader, "Id"),
+                Collection = new Collection()
+                {
+                    Id = DbUtils.GetInt(reader, "Id"),
+                    Name = DbUtils.GetString(reader, "CollectionName"),
+
+                },
+                Tags = new List<Tag>()
+            };
+            if (DbUtils.IsNotDbNull(reader, "TagId"))
+            {
+                shoe.Tags.Add(new Tag()
+                {
+                    Id = DbUtils.GetInt(reader, "TagId"),
+                    Name = DbUtils.GetString(reader, "TagName")
+                });
+            }
+            return shoe;
         }
     }
 }
