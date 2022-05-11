@@ -58,7 +58,7 @@ const ShoeEdit = () => {
                 type="date"
                 name="releaseDate"
                 id="releaseDate"
-                value={shoe.releaseDate}
+                value={shoe.releaseDate.split("T")[0]}
                 onChange={handleInputChange}
                 />
             </FormGroup>
@@ -78,7 +78,7 @@ const ShoeEdit = () => {
                 type="date"
                 name="purchaseDate"
                 id="purchaseDate"
-                value={shoe.purchaseDate}
+                value={shoe.purchaseDate.split("T")[0]}
                 onChange={handleInputChange}
                 />
             </FormGroup>
