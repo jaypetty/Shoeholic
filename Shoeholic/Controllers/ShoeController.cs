@@ -32,8 +32,13 @@ namespace Shoeholic.Controllers
         [HttpPost]
         public IActionResult Post(Shoe shoe)
         {
-            
+            _shoeRepository.Add(shoe);
+            foreach(int tagId in shoe.ChoosenTags)
+            {
+                _shoeRepository.AddShoeTag(tagId, shoe.Id);
 
+            }
+           
             return Ok(shoe);
         }
 

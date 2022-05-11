@@ -22,7 +22,7 @@ const MyCollections = () => {
                 {collections.map((collection) => (
                     <Collection key={collection.id} collection={collection}  />
                 ))}
-                <Button className="btn btn-primary" href="/mycollections/newCollection">New Collection</Button>
+                <Button className="btn btn-primary" href="/mycollections/newCollection">Add A New Collection</Button>
             </div>
         </div>
     );

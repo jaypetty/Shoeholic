@@ -16,14 +16,15 @@ const ShoeForm = () => {
         purchaseDate: "",
         title: "",
         colorWay: "",
-        collectionId: "",
-        SelectedTagIds: new Set()
+        collectionId: 0,
+       
     };
 
     const [shoe, setShoe] = useState(emptyShoe);
     const [tags, setTags] = useState([]);
     const [brands, setBrands] = useState([])
     const [collections, setCollections] = useState([])
+    const [choosentags, setchoosentags] = useState([])
 
     const getTags = () => {
         getAllTags().then((tags) => setTags(tags))
@@ -62,6 +63,7 @@ const ShoeForm = () => {
     const handleSave = (evt) => {
         evt.preventDefault();
         const shoeCopy = {...shoe};
+        shoeCopy.choosentags = choosentags
         if (shoeCopy.brandId === 0){
             window.alert("Please select a brand.")
         }
@@ -69,10 +71,24 @@ const ShoeForm = () => {
             window.alert("Please select a collection.")
         }
       
-        addShoe(shoeCopy).then((s) => { addShoeTags(s.id, tags).then(() => (history.push("/myshoes"))
-           );
-        });
+        addShoe(shoeCopy).then((s) => (history.push("/myshoes"))
+        );
     };
+
+    const handleTagCheckbox = (evt) => {
+        const choosentagscopy = [...choosentags]
+        if(choosentagscopy.includes(parseInt(evt.target.value))){
+            const indexposition = choosentagscopy.indexOf(parseInt(evt.target.value))
+            choosentagscopy.splice(indexposition, 1)
+        }
+        else{
+            choosentagscopy.push(parseInt(evt.target.value))
+        }
+        debugger
+        setchoosentags(choosentagscopy)
+        
+
+    }
 
 
     return (
@@ -161,7 +177,7 @@ const ShoeForm = () => {
             Please select your tag(s) for your shoe:
             {tags.map((tag) => {
                 return <div>
-                            <input type="checkbox" value={tag.id} onChange={(evt) => handleTagCheck(evt)} />
+                            <input type="checkbox" value={tag.id} onChange={handleTagCheckbox} />
                             <label>
                             {tag.name}
                             </label>

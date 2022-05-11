@@ -18,11 +18,12 @@ namespace Shoeholic.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public string Colorway { get; set; }
+        public string ColorWay { get; set; }
         public int CollectionId { get; set; }
         public Brand Brand { get; set; }
         public Collection Collection { get; set; }
         public List<Tag> Tags { get; set; }
-        public List<int> SelectedTagIds { get; set; }
+        public List<int> ChoosenTags { get; set; }
+        
     }
 }

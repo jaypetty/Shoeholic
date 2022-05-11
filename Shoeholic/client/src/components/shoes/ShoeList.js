@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from "react";
 import Shoe from "./Shoe";
 import { getAllShoes } from "../../modules/shoeManager";
+import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
 
 const MyShoes = () => {
@@ -20,6 +21,7 @@ const MyShoes = () => {
                 {shoes.map((shoe) => (
                     <Shoe key={shoe.id} shoe={shoe}  />
                 ))}
+                <Button className="btn btn-primary" href="/myshoes/newShoe">Add a New Shoe</Button>
             </div>
         </div>
     );

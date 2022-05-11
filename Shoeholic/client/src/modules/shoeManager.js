@@ -124,15 +124,15 @@ export const getTagsByShoeId = (id) => {
   );
 };
 
-export const addShoeTags = (shoeId, tags) => {
+export const addShoeTags = (shoe) => {
   return getToken().then((token) => {
-    return fetch(`${_apiUrl}/${shoeId}/tags`, {
+    return fetch(`${_apiUrl}/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(tags),
+      body: JSON.stringify(shoe),
     }).then((res) => {
       if (res.ok) {
         return res.json();
