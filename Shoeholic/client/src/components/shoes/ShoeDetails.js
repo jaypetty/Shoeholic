@@ -30,13 +30,13 @@ const ShoeDetails = () => {
             <Card>
                 <CardTitle>{shoe.name} by {shoe.brand.name}</CardTitle>
                 <CardText>
-                    <small>{shoe.releaseDate}</small>
+                    <small>{shoe.releaseDate.split("T")[0]}</small>
                 </CardText>
                 <CardText>
                     <small>{shoe.retailPrice}</small>
                 </CardText>
                 <CardText>
-                    <small>{shoe.purchaseDate}</small>
+                    <small>{shoe.purchaseDate.split("T")[0]}</small>
                 </CardText>
                 <CardText>
                     <small>{shoe.title}</small>
