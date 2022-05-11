@@ -37,7 +37,7 @@ namespace Shoeholic.Repositories
                                 BrandId = DbUtils.GetInt(reader, "BrandId"),
                                 ReleaseDate = DbUtils.GetDateTime(reader, "ReleaseDate"),
                                 Title = DbUtils.GetString(reader, "Title"),
-                                Colorway = DbUtils.GetString(reader, "ColorWay"),
+                                ColorWay = DbUtils.GetString(reader, "ColorWay"),
                                 Brand = new Brand()
                                 {
                                     Id = DbUtils.GetInt(reader, "Id"),
@@ -68,7 +68,7 @@ namespace Shoeholic.Repositories
                     DbUtils.AddParameter(cmd, "@retailPrice", shoe.RetailPrice);
                     DbUtils.AddParameter(cmd, "@purchaseDate", shoe.PurchaseDate);
                     DbUtils.AddParameter(cmd, "@title", shoe.Title);
-                    DbUtils.AddParameter(cmd, "@colorWay", shoe.Colorway);
+                    DbUtils.AddParameter(cmd, "@colorWay", shoe.ColorWay);
                     DbUtils.AddParameter(cmd, "@collectionId", shoe.CollectionId);
 
                     shoe.Id = (int)cmd.ExecuteScalar();
@@ -141,7 +141,7 @@ namespace Shoeholic.Repositories
                     DbUtils.AddParameter(cmd, "@retailPrice", shoe.RetailPrice);
                     DbUtils.AddParameter(cmd, "@purchaseDate", shoe.PurchaseDate);
                     DbUtils.AddParameter(cmd, "@title", shoe.Title);
-                    DbUtils.AddParameter(cmd, "@colorWay", shoe.Colorway);
+                    DbUtils.AddParameter(cmd, "@colorWay", shoe.ColorWay);
                     DbUtils.AddParameter(cmd, "@collectionId", shoe.CollectionId);
 
                     cmd.ExecuteNonQuery();
@@ -240,7 +240,8 @@ namespace Shoeholic.Repositories
                 Name = DbUtils.GetString(reader, "Name"),
                 ReleaseDate = DbUtils.GetDateTime(reader, "ReleaseDate"),
                 PurchaseDate = DbUtils.GetDateTime(reader, "PurchaseDate"),
-                Colorway = DbUtils.GetString(reader, "ColorWay"),
+                RetailPrice = DbUtils.GetInt(reader, "RetailPrice"),
+                ColorWay = DbUtils.GetString(reader, "ColorWay"),
                 BrandId = DbUtils.GetInt(reader, "BrandId"),
                 Brand = new Brand()
                 {
@@ -265,6 +266,28 @@ namespace Shoeholic.Repositories
                 });
             }
             return shoe;
+        }
+
+        public void AddShoeTag(int tagId, int shoeId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO [ShoeTag] (ShoeId, TagId)
+                                        VALUES (@shoeId, @tagId)";
+
+                    
+                       
+
+                        DbUtils.AddParameter(cmd, "@shoeId", shoeId);
+                        DbUtils.AddParameter(cmd, "@tagId", tagId);
+
+                    
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
