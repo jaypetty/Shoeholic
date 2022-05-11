@@ -124,6 +124,17 @@ export const getTagsByShoeId = (id) => {
   );
 };
 
+export const deleteShoe = (id) => {
+  return getToken().then((token) => {
+    return fetch(`${_apiUrl}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  });
+};
+
 export const addShoeTags = (shoe) => {
   return getToken().then((token) => {
     return fetch(`${_apiUrl}/`, {

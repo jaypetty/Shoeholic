@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {Card,CardImg, CardText,CardTitle,Container,Button} from "reactstrap";
-import { getShoeById } from "../../modules/shoeManager";
+import { getShoeById, deleteShoe } from "../../modules/shoeManager";
 import { Link } from "react-router-dom";
 
 const ShoeDetails = () => {
     const [shoe, setShoe] = useState();
     const {id} = useParams();
+    const history = useHistory();
 
     const getShoe = (id) => {
         getShoeById(id).then((shoe) => setShoe(shoe));
+    };
+
+    const deleteAShoe = () => {
+        deleteShoe(shoe.id).then(() => history.push(`/myshoes`));
     };
 
     useEffect(() => {
@@ -25,13 +30,13 @@ const ShoeDetails = () => {
             <Card>
                 <CardTitle>{shoe.name} by {shoe.brand.name}</CardTitle>
                 <CardText>
-                    <small>{shoe.releaseDate}</small>
+                    <small>{shoe.releaseDate.split("T")[0]}</small>
                 </CardText>
                 <CardText>
                     <small>{shoe.retailPrice}</small>
                 </CardText>
                 <CardText>
-                    <small>{shoe.purchaseDate}</small>
+                    <small>{shoe.purchaseDate.split("T")[0]}</small>
                 </CardText>
                 <CardText>
                     <small>{shoe.title}</small>
@@ -47,6 +52,9 @@ const ShoeDetails = () => {
                 <Link to={`/myshoes/edit/${id}`}>
             <Button>Edit</Button>
           </Link>
+          <Button  onClick={() => deleteAShoe()}>
+                                    Delete
+                                </Button>
             </Card>
         </Container>
     );

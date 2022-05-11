@@ -231,6 +231,20 @@ namespace Shoeholic.Repositories
             }
         }
 
+        public void Delete(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Shoe WHERE Id = @Id";
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         private Shoe NewShoeFromReader(SqlDataReader reader)
         {
             Shoe shoe = new Shoe()
