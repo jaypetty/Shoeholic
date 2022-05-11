@@ -84,7 +84,7 @@ const ShoeForm = () => {
         else{
             choosentagscopy.push(parseInt(evt.target.value))
         }
-        debugger
+       
         setchoosentags(choosentagscopy)
         
 

@@ -60,6 +60,13 @@ namespace Shoeholic.Controllers
             return Ok(shoe);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _shoeRepository.Delete(id);
+            return NoContent();
+        }
+
         [HttpGet("GetWithCollections/{id}")]
         public IActionResult GetWithCollections(int id)
         {
