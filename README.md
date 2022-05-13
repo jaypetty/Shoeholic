@@ -27,4 +27,4 @@ Shoeholic is my full stack back end capstone where you can manage and keep track
 
 ## Planning Documents
 -   [Entity-Relationship Diagram](https://dbdiagram.io/d/6266d76795e7f23c616cb3c6)
--   
+ 
